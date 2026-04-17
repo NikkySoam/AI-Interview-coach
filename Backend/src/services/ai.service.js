@@ -28,7 +28,8 @@ const interviewReportSchema = z.object({
         day: z.number().describe("The day number in the preparation plan, indicating the sequence of the preparation steps."),
         focus: z.string().describe("The specific focus or topic that the candidate should concentrate on for that day in order to improve their skills and address the identified gaps."),
         tasks: z.array(z.string()).describe("A list of specific tasks or activities that the candidate should complete on that day to work towards improving their skills and preparing for future interviews.")
-    })).describe("A structured preparation plan for the candidate, outlining daily focus areas to help them improve their skills and perform better in future interviews.")
+    })).describe("A structured preparation plan for the candidate, outlining daily focus areas to help them improve their skills and perform better in future interviews."),
+    title:z.string().describe("The title of the interview report, which can be based on the job position or role that the candidate is applying for.")  
 })
 
 
@@ -51,6 +52,8 @@ async function generateInterviewReport({resume,selfDescription,jobDescription}) 
   return JSON.parse(response.text);
 }
 
-module.exports = generateInterviewReport;
+
+
+module.exports = {generateInterviewReport,generateResumePdf};
 
 

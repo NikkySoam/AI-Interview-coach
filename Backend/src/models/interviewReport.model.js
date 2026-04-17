@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { string } = require('zod')
 
 const techincalQuestionSchema = new mongoose.Schema({
     question:{
@@ -93,6 +94,10 @@ const interviewReportSchema = new mongoose.Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"users"
+    },
+    title:{
+        type:String,
+        required:[true,"job title is required"]
     }
 },{
     timestamps:true

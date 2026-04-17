@@ -1,7 +1,30 @@
-import React from 'react'
 import '../style/home.scss';
+import { useInterview } from '../hooks/useInterview';
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router';
 
 function Home() {
+    const navigate = useNavigate();
+    const {loading, generateReportHook,reports} = useInterview();
+
+    const [selfDescription,setSelfDescription] = useState("");
+    const [jobDescription,setJobDescription] = useState("");
+    const resumeInputRef = useRef();
+
+    const handleGenerateReport = async ()=>{
+        const resumeFile = resumeInputRef.current.files[0];
+        const data = await generateReportHook({selfDescription,jobDescription,resumeFile});
+        navigate(`/interview/${data._id}`);
+    }
+
+    if(loading){
+        return (
+            <main className="loading-screen">
+                <h1>Loading your interview plan...</h1>
+            </main>
+        )
+    }
+
   return (
     <div className='home-page'>
 
@@ -25,7 +48,7 @@ function Home() {
                             <span className='badge badge--required'>Required</span>
                         </div>
                         <textarea
-                            // onChange={(e) => { setJobDescription(e.target.value) }}
+                            onChange={(e) => { setJobDescription(e.target.value) }}
                             className='panel__textarea'
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
                             maxLength={5000}
@@ -57,7 +80,7 @@ function Home() {
                                 </span>
                                 <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
                                 <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                {/* <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' /> */}
+                                <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
                             </label>
                         </div>
 
@@ -68,7 +91,7 @@ function Home() {
                         <div className='self-description'>
                             <label className='section-label' htmlFor='selfDescription'>Quick Self-Description</label>
                             <textarea
-                                // onChange={(e) => { setSelfDescription(e.target.value) }}
+                                onChange={(e) => { setSelfDescription(e.target.value) }}
                                 id='selfDescription'
                                 name='selfDescription'
                                 className='panel__textarea panel__textarea--short'
@@ -90,15 +113,15 @@ function Home() {
                 <div className='interview-card__footer'>
                     <span className='footer-info'>AI-Powered Strategy Generation &bull; Approx 30s</span>
                     <button
-                        // onClick={handleGenerateReport}
+                        onClick={handleGenerateReport}
                         className='generate-btn'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" /></svg>
                         Generate My Interview Strategy
                     </button>
                 </div>
             </div>
-
-            {/* Recent Reports List
+            
+            {/* Recent Reports List */}
             {reports.length > 0 && (
                 <section className='recent-reports'>
                     <h2>My Recent Interview Plans</h2>
@@ -112,7 +135,7 @@ function Home() {
                         ))}
                     </ul>
                 </section>
-            )} */}
+            )}
 
             {/* Page Footer */}
             <footer className='page-footer'>
